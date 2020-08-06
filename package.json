@@ -1,0 +1,25 @@
+{
+  "name": "express-jobly",
+  "version": "1.0.0",
+  "description": "**Goals and requirements**\r   - All of your responses should be in JSON. Use Insonmia or curl to test your API.  \r   - Be thoughtful about function and variable names, and for you to write appropriate documentation for every function and route.  \r   - After each section, we expect you to write tests for the routes in that section.  \r   - For each resource, place all of your SQL/database logic in a class. We do not want to see ANY SQL in your routes!",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clay099/Jobly.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/clay099/Jobly/issues"
+  },
+  "homepage": "https://github.com/clay099/Jobly#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0"
+  }
+}
