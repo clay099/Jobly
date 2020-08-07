@@ -1,6 +1,7 @@
 const db = require("../db");
 const ExpressError = require("../helpers/expressError");
 const sqlForPartialUpdate = require("../helpers/partialUpdate");
+const sqlForDelete = require("../helpers/removeFromDB");
 
 /**collection of related methods for companies */
 
@@ -23,7 +24,7 @@ class Company {
 		);
 		const comp = result.rows[0];
 
-		if (comp === undefined) {
+		if (comp === undefined) {``
 			const err = new ExpressError("Could not create company", 400);
 			throw err;
 		}
@@ -61,6 +62,17 @@ class Company {
 		const updateData = sqlForPartialUpdate("companies", items, "handle", this.handle);
 		const result = await db.query(updateData);
 		return ({ handle, name, num_employees, description, logo_url } = result.rows[0]);
+	}
+
+	/** remove company with matching handle */
+	static async remove(handle) {
+		let queryString = sqlForDelete("companies", "handle", handle);
+		const result = await db.query(queryString);
+
+		if (result.rows.length === 0) {
+			const err = new ExpressError(`Could not find company: ${handle}`, 404);
+			throw err;
+		}
 	}
 }
 

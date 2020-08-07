@@ -1,0 +1,75 @@
+const express = require("express");
+const ExpressError = require("../helpers/expressError");
+const Company = require("../models/companyModel");
+const jsonschema = require("jsonschema");
+const companySchema = require("../schema/companySchema.json");
+
+const router = new express.Router();
+
+/** GET / => {companies : [companyData], [company2Data], ...} */
+router.get("/", async (req, res, next) => {
+	try {
+		let companies = await Company.all();
+		return res.json({ companies });
+	} catch (e) {
+		return next(e);
+	}
+});
+
+/** POST / companyData => {company: newCompany} */
+router.post("/", async (req, res, next) => {
+	try {
+		// try company against schema
+		const result = jsonschema.validate(req.body, companySchema);
+
+		// if company fails against schema throw error
+		if (!result.valid) {
+			let listErr = result.errors.map((e) => e.stack);
+			let err = new ExpressError(listErr, 400);
+			return next(err);
+		}
+
+		// we know company passes and create in DB and return as json
+		const company = await Company.create(req.body);
+		return res.status(201).json({ company });
+	} catch (e) {
+		return next(e);
+	}
+});
+
+/** GET /[handle] => {company: companyData} */
+router.get("/:handle", async (req, res, next) => {
+	try {
+		const company = await Company.get(req.params.handle);
+		return res.json({ company });
+	} catch (e) {
+		return next(e);
+	}
+});
+
+/** PATCH /[handle] => {company: companyData} */
+router.patch("/:handle", async (req, res, next) => {
+	try {
+		let comp = await Company.get(req.params.handle);
+		const result = jsonschema.validate(req.body, companySchema);
+		if (!result.valid) {
+			let listErr = result.errors.map((e) => e.stack);
+			let err = new ExpressError(listErr, 400);
+			return next(err);
+		}
+		let company = await comp.update(req.body);
+		return res.json({ company });
+	} catch (e) {
+		return next(e);
+	}
+});
+
+/** DELETE /[handle] => {message: "Company deleted"} */
+router.delete("/:handle", async (req, res, next) => {
+	try {
+		await Company.remove(req.params.handle);
+		return res.json({ message: "Company deleted" });
+	} catch (e) {
+		return next(e);
+	}
+});

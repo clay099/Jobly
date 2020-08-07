@@ -14,8 +14,8 @@ app.use(express.json());
 app.use(morgan("tiny"));
 
 // set up companies routes
-const companiesRoutes = require("./routes/companies");
-app.use("/companies", companiesRoutes);
+const companyRoutes = require("./routes/companyRoutes");
+app.use("/companies", companyRoutes);
 
 /** 404 handler */
 

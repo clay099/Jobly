@@ -2,8 +2,7 @@
  * Generate a selective update query based on a request body:
  *
  * - table: where to make the query
- * - items: an object with keys of columns you want to update and values with
- *          updated values
+ * - items: an object with keys of columns you want to update and values with updated values
  * - key: the column that we query by (e.g. username, handle, id)
  * - id: current record ID
  *
