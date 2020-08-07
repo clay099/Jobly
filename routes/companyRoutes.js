@@ -10,6 +10,13 @@ const router = new express.Router();
 router.get("/", async (req, res, next) => {
 	try {
 		let companies = await Company.all();
+		// if search is in the query string filter results by company name or handle
+		if (req.query.search) {
+			term = req.query.search;
+			companies = companies.filter(
+				(company) => company.name.includes(term) || company.handle.includes(term)
+			);
+		}
 		return res.json({ companies });
 	} catch (e) {
 		return next(e);
