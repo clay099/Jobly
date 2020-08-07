@@ -28,7 +28,6 @@ router.post("/", async (req, res, next) => {
 			let err = new ExpressError(listErr, 400);
 			return next(err);
 		}
-
 		// we know company passes and create in DB and return as json
 		const company = await Company.create(req.body);
 		return res.status(201).json({ company });
@@ -51,7 +50,18 @@ router.get("/:handle", async (req, res, next) => {
 router.patch("/:handle", async (req, res, next) => {
 	try {
 		let comp = await Company.get(req.params.handle);
-		const result = jsonschema.validate(req.body, companySchema);
+
+		// if name, num_employees, description or logo_url has been provided in req.body update company details otherwise leave value
+		comp.name = req.body.name ? req.body.name : comp.name;
+
+		comp.num_employees = req.body.num_employees ? req.body.num_employees : comp.num_employees;
+
+		comp.description = req.body.description ? req.body.description : comp.description;
+
+		comp.logo_url = req.body.logo_url ? req.body.logo_url : comp.logo_url;
+
+		// validate against schema
+		const result = jsonschema.validate(comp, companySchema);
 		if (!result.valid) {
 			let listErr = result.errors.map((e) => e.stack);
 			let err = new ExpressError(listErr, 400);
@@ -73,3 +83,5 @@ router.delete("/:handle", async (req, res, next) => {
 		return next(e);
 	}
 });
+
+module.exports = router;
