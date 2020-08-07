@@ -3,6 +3,7 @@ const ExpressError = require("../helpers/expressError");
 const Company = require("../models/companyModel");
 const jsonschema = require("jsonschema");
 const companySchema = require("../schema/companySchema.json");
+const queryStringHelp = require("../helpers/queryString");
 
 const router = new express.Router();
 
@@ -10,13 +11,12 @@ const router = new express.Router();
 router.get("/", async (req, res, next) => {
 	try {
 		let companies = await Company.all();
-		// if search is in the query string filter results by company name or handle
-		if (req.query.search) {
-			term = req.query.search;
-			companies = companies.filter(
-				(company) => company.name.includes(term) || company.handle.includes(term)
-			);
+
+		// if search terms are passed in the query string run helper function to filter results
+		if (req.query) {
+			companies = queryStringHelp(req.query, companies);
 		}
+
 		return res.json({ companies });
 	} catch (e) {
 		return next(e);
