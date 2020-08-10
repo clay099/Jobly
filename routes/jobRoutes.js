@@ -3,7 +3,7 @@ const ExpressError = require("../helpers/expressError");
 const Job = require("../models/jobModel");
 const jsonschema = require("jsonschema");
 const jobSchema = require("../schema/jobSchema.json");
-const jobQueryStringHelp = require("../helpers/queryString");
+const { jobQueryStringHelp } = require("../helpers/queryString");
 
 const router = new express.Router();
 
@@ -56,24 +56,24 @@ router.get("/:id", async (req, res, next) => {
 /** PATCH /[id] => {job: jobData} */
 router.patch("/:id", async (req, res, next) => {
 	try {
-		let job = await Job.get(req.params.id);
+		let j = await Job.get(req.params.id);
 
 		// if title, salary, equity, or company_handle has been provided in req.body update job details otherwise leave value
-		job.title = req.body.title ? req.body.title : job.title;
+		j.title = req.body.title ? req.body.title : j.title;
 
-		job.salary = req.body.salary ? req.body.salary : job.salary;
+		j.salary = req.body.salary ? req.body.salary : j.salary;
 
-		job.equity = req.body.equity ? req.body.equity : job.equity;
+		j.equity = req.body.equity ? req.body.equity : j.equity;
 
-		job.company_handle = req.body.company_handle ? req.body.company_handle : job.company_handle;
+		j.company_handle = req.body.company_handle ? req.body.company_handle : j.company_handle;
 
 		// validate against schema
 		const result = jsonschema.validate(
 			{
-				title: job.title,
-				salary: job.salary,
-				equity: job.equity,
-				company_handle: job.company_handle,
+				title: j.title,
+				salary: j.salary,
+				equity: j.equity,
+				company_handle: j.company_handle,
 			},
 			jobSchema
 		);
@@ -82,7 +82,7 @@ router.patch("/:id", async (req, res, next) => {
 			let err = new ExpressError(listErr, 400);
 			return next(err);
 		}
-		let job = await job.update(req.body);
+		job = await job.update(req.body);
 		return res.json({ job });
 	} catch (e) {
 		return next(e);

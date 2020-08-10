@@ -3,7 +3,7 @@ const ExpressError = require("../helpers/expressError");
 const Company = require("../models/companyModel");
 const jsonschema = require("jsonschema");
 const companySchema = require("../schema/companySchema.json");
-const companyQueryStringHelp = require("../helpers/queryString");
+const { companyQueryStringHelp } = require("../helpers/queryString");
 
 const router = new express.Router();
 
