@@ -47,7 +47,10 @@ class Company {
 	/** get company by handle */
 	static async get(handle) {
 		const result = await db.query(
-			`SELECT handle, name, num_employees, description, logo_url FROM companies WHERE handle=$1`,
+			`SELECT c.handle, c.name, c.num_employees, c.description, c.logo_url, j.id, j.title, j.salary, j.equity, j.date_posted
+            FROM companies AS c
+            JOIN jobs AS j ON c.handle = j.company_handle
+            WHERE c.handle=$1`,
 			[handle]
 		);
 		const comp = result.rows[0];
@@ -56,7 +59,15 @@ class Company {
 			const err = new ExpressError(`Could not find company handle: ${handle}`, 404);
 			throw err;
 		}
-		return new Company(comp);
+		let c = new Company(comp);
+		c.jobs = result.rows.map((j) => ({
+			id: j.id,
+			title: j.title,
+			salary: j.salary,
+			equity: j.equity,
+			date_posted: j.date_posted,
+		}));
+		return c;
 	}
 
 	/** update company
