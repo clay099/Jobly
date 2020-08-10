@@ -133,8 +133,6 @@ describe("test company routes", () => {
 			expect(resp.statusCode).toBe(200);
 			expect(resp.body).toEqual({ message: "Company deleted" });
 		});
-	});
-	describe("DELETE /companies/:handle", () => {
 		test("provides an error response if the company can not be found", async () => {
 			let resp = await request(app).delete(`/companies/invalid`);
 			expect(resp.statusCode).toBe(404);
