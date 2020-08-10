@@ -30,4 +30,24 @@ function companyQueryStringHelp(command, companies) {
 	return companies;
 }
 
-module.exports = companyQueryStringHelp;
+/**generates a filtered list of jobs based on passed query */
+function jobQueryStringHelp(command, jobs) {
+	// if search is in the query string filter results by job title or company handle
+	if (command.search) {
+		jobs = jobs.filter(
+			(job) =>
+				job.title.includes(command.search) || job.company_handle.includes(command.search)
+		);
+	}
+	// if min_salary is in the query string filter results by min salary
+	if (command.min_salary) {
+		jobs = jobs.filter((job) => job.min_salary > command.min_salary);
+	}
+	// if min_equity is in the query string filter results by min_equity
+	if (command.min_equity) {
+		jobs = jobs.filter((job) => job.min_equity > command.min_equity);
+	}
+	return jobs;
+}
+
+module.exports = { companyQueryStringHelp, jobQueryStringHelp };
