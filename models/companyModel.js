@@ -60,13 +60,22 @@ class Company {
 			throw err;
 		}
 		let c = new Company(comp);
-		c.jobs = result.rows.map((j) => ({
-			id: j.id,
-			title: j.title,
-			salary: j.salary,
-			equity: j.equity,
-			date_posted: j.date_posted,
-		}));
+		// filter out empty rows
+		let jobs = result.rows
+			// filters out rows which don't have an job id
+			.filter((j) => j.id)
+			// for rows which have values put in a list
+			.map((j) => ({
+				id: j.id,
+				title: j.title,
+				salary: j.salary,
+				equity: j.equity,
+				date_posted: j.date_posted,
+			}));
+		// if list if empty do nothing, otherwise add list to c object
+		if (jobs.length !== 0) {
+			c.jobs = jobs;
+		}
 		return c;
 	}
 
