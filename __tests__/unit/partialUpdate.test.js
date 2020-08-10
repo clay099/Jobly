@@ -1,5 +1,4 @@
 process.env.NODE_ENV = "test";
-const request = require("supertest");
 const sqlForPartialUpdate = require("../../helpers/partialUpdate");
 
 describe("partialUpdate()", () => {
