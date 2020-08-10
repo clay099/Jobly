@@ -3,6 +3,7 @@ const request = require("supertest");
 const db = require("../../db");
 const app = require("../../app");
 const Company = require("../../models/companyModel");
+const Job = require("../../models/jobModel");
 console.error = jest.fn();
 
 describe("test company routes", () => {
@@ -82,8 +83,29 @@ describe("test company routes", () => {
 		});
 	});
 	describe("GET /companies/:handle", () => {
-		test("get details on company", async () => {
+		test("get details on company when there is no job data", async () => {
 			let resp = await request(app).get(`/companies/${values.handle}`);
+			expect(resp.statusCode).toBe(200);
+			expect(resp.body).toEqual({ company: c });
+		});
+		test("get details on company when is also job data", async () => {
+			let job = await Job.create({
+				title: "owner",
+				salary: 100000,
+				equity: 0.9,
+				company_handle: values.handle,
+			});
+			let resp = await request(app).get(`/companies/${values.handle}`);
+			c.jobs = [
+				{
+					title: job.title,
+					salary: job.salary,
+					equity: job.equity,
+					id: job.id,
+					date_posted: expect.any(String),
+				},
+			];
+
 			expect(resp.statusCode).toBe(200);
 			expect(resp.body).toEqual({ company: c });
 		});
