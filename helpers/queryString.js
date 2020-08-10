@@ -41,11 +41,11 @@ function jobQueryStringHelp(command, jobs) {
 	}
 	// if min_salary is in the query string filter results by min salary
 	if (command.min_salary) {
-		jobs = jobs.filter((job) => job.min_salary > command.min_salary);
+		jobs = jobs.filter((job) => job.salary > command.min_salary);
 	}
 	// if min_equity is in the query string filter results by min_equity
 	if (command.min_equity) {
-		jobs = jobs.filter((job) => job.min_equity > command.min_equity);
+		jobs = jobs.filter((job) => job.equity > command.min_equity);
 	}
 	return jobs;
 }
