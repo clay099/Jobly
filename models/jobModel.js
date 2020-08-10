@@ -7,7 +7,8 @@ const sqlForDelete = require("../helpers/removeFromDB");
 
 class Job {
 	constructor({ id, title, salary, equity, company_handle, date_posted }) {
-		(this.id = id), (this.title = title);
+		this.id = id;
+		this.title = title;
 		this.salary = salary;
 		this.equity = equity;
 		this.company_handle = company_handle;
