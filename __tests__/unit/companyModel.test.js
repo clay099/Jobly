@@ -2,6 +2,7 @@ process.env.NODE_ENV = "test";
 const db = require("../../db");
 const app = require("../../app");
 const Company = require("../../models/companyModel");
+const Job = require("../../models/jobModel");
 
 describe("Test Company Model", () => {
 	let values;
@@ -99,13 +100,29 @@ describe("Test Company Model", () => {
 		});
 	});
 	describe("test Company.get() method", () => {
+		let job;
 		beforeEach(async function () {
 			await db.query("DELETE FROM companies");
 			await Company.create(values);
+			job = await Job.create({
+				title: "owner",
+				salary: 100000,
+				equity: 0.9,
+				company_handle: values.handle,
+			});
 		});
 
 		test("gets a company details from provided handle", async () => {
 			let resp = await Company.get(values.handle);
+			values.jobs = [
+				{
+					title: job.title,
+					salary: job.salary,
+					equity: job.equity,
+					id: job.id,
+					date_posted: job.date_posted,
+				},
+			];
 			expect(resp).toEqual(values);
 		});
 
