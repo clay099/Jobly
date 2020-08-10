@@ -1,3 +1,4 @@
+const ExpressError = require("./expressError");
 /**
  * Generate a delete query based on a request body:
  *
@@ -10,6 +11,9 @@
  */
 
 function sqlForDelete(table, key, id) {
+    if(table === undefined || key === undefined || id === undefined){
+        throw new ExpressError('all parameters are required',500)
+    }
 	// build query
 	let query = `DELETE FROM ${table} WHERE ${key}=$1 RETURNING *`;
 
