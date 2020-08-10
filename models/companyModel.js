@@ -78,6 +78,7 @@ class Company {
 			const err = new ExpressError(`Could not find company handle: ${handle}`, 404);
 			throw err;
 		}
+		return "deleted";
 	}
 }
 
