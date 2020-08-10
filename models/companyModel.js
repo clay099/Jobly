@@ -30,7 +30,6 @@ class Company {
 		const comp = result.rows[0];
 
 		if (comp === undefined) {
-			``;
 			const err = new ExpressError("Could not create company", 400);
 			throw err;
 		}
