@@ -1,7 +1,7 @@
 const ExpressError = require("./expressError");
 
 /**generates a filtered list of companies based on passed query */
-function queryStringHelp(command, companies) {
+function companyQueryStringHelp(command, companies) {
 	// if min_employees & max_employees is in the query string check that the min value is not greater than the max value.
 	if (command.min_employees && command.max_employees) {
 		if (command.min_employees > command.max_employees) {
@@ -30,4 +30,4 @@ function queryStringHelp(command, companies) {
 	return companies;
 }
 
-module.exports = queryStringHelp;
+module.exports = companyQueryStringHelp;
