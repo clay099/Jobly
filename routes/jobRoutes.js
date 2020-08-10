@@ -82,7 +82,7 @@ router.patch("/:id", async (req, res, next) => {
 			let err = new ExpressError(listErr, 400);
 			return next(err);
 		}
-		job = await job.update(req.body);
+		let job = await j.update(req.body);
 		return res.json({ job });
 	} catch (e) {
 		return next(e);

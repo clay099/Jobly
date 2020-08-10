@@ -18,6 +18,6 @@ CREATE TABLE jobs (
     salary FLOAT NOT NULL,
     equity FLOAT NOT NULL,
     company_handle TEXT NOT NULL REFERENCES companies ON DELETE CASCADE,
-    date_posted TIMESTAMP NOT NULL,
+    date_posted TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT max_equity_check CHECK ((equity < 1))
 );
