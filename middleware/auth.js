@@ -48,7 +48,7 @@ function ensureCorrectUser(req, res, next) {
 
 function ensureIsAdmin(req, res, next) {
 	try {
-		if (req.user.is_admin) {
+		if (req.user.is_admin === true) {
 			return next();
 		} else {
 			const err = new ExpressError(`Unauthorized`, 401);
