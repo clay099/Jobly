@@ -7,7 +7,7 @@ const router = new express.Router();
 router.post("/login", async (req, res, next) => {
 	try {
 		let { password, username } = req.body;
-		let user = User.getAll(username);
+		let user = await User.getAll(username);
 		let token = await user.authenticate(password);
 		return res.json({ token });
 	} catch (e) {
