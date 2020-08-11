@@ -83,7 +83,13 @@ class User {
 	async update(items) {
 		const updateData = sqlForPartialUpdate("users", items, "username", this.username);
 		const result = await db.query(updateData.query, updateData.values);
-		return result.rows[0];
+		let u = result.rows[0];
+
+		// remove sensitive information
+		delete u.password;
+		delete u.is_admin;
+
+		return new User(u);
 	}
 
 	/** remove user with matching id */

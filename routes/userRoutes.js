@@ -66,15 +66,15 @@ router.patch("/:username", async (req, res, next) => {
 		u.photo_url = req.body.photo_url ? req.body.photo_url : u.photo_url;
 
 		u.is_admin = req.body.is_admin ? req.body.is_admin : u.is_admin;
-		console.log(u);
 		// validate against schema
-		const result = jsonschema.validate({ u }, userSchema);
+		const result = jsonschema.validate(u, userSchema);
 		if (!result.valid) {
 			let listErr = result.errors.map((e) => e.stack);
 			let err = new ExpressError(listErr, 400);
 			return next(err);
 		}
 		let user = await u.update(req.body);
+
 		return res.json({ user });
 	} catch (e) {
 		return next(e);
