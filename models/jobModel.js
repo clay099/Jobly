@@ -32,7 +32,7 @@ class Job {
 		return new Job(job);
 	}
 
-	/** get all companies */
+	/** get all jobs */
 	static async all() {
 		const result = await db.query(
 			`SELECT id, title, salary, equity, company_handle, date_posted FROM jobs ORDER BY company_handle, date_posted`
