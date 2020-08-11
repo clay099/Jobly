@@ -3,7 +3,6 @@ const ExpressError = require("../helpers/expressError");
 const User = require("../models/userModel");
 const jsonschema = require("jsonschema");
 const userSchema = require("../schema/userSchema.json");
-const { userQueryStringHelp } = require("../helpers/queryString");
 
 const router = new express.Router();
 
@@ -13,11 +12,6 @@ module.exports = router;
 router.get("/", async (req, res, next) => {
 	try {
 		let users = await User.all();
-
-		// if search terms are passed in the query string run helper function to filter results
-		if (req.query) {
-			users = userQueryStringHelp(req.query, users);
-		}
 
 		return res.json({ users });
 	} catch (e) {
