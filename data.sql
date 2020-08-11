@@ -3,6 +3,7 @@
 
 DROP TABLE IF EXISTS companies CASCADE;
 DROP TABLE IF EXISTS jobs CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
 
 CREATE TABLE companies (
     handle TEXT PRIMARY KEY,
@@ -20,4 +21,14 @@ CREATE TABLE jobs (
     company_handle TEXT NOT NULL REFERENCES companies ON DELETE CASCADE,
     date_posted TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT max_equity_check CHECK ((equity < 1))
+);
+
+CREATE TABLE users (
+    username TEXT PRIMARY KEY,
+    password TEXT NOT NULL, 
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    photo_url TEXT,
+    is_admin BOOLEAN NOT NULL DEFAULT FALSE
 );
