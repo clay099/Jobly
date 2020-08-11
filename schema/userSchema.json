@@ -9,7 +9,7 @@
 			"last_name": "Wilson",
 			"email": "pip@gmail.com",
 			"photo_url": "https://cdn3.vectorstock.com/i/1000x1000/21/62/human-icon-in-circle-vector-25482162.jpg",
-			"is_admin": "false"
+			"is_admin": false
 		}
 	],
 	"required": ["username", "password", "first_name", "last_name", "email", "is_admin"],

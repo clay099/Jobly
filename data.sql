@@ -1,5 +1,5 @@
-\c jobly
--- \c jobly-test
+-- \c jobly
+\c jobly-test
 
 DROP TABLE IF EXISTS companies CASCADE;
 DROP TABLE IF EXISTS jobs CASCADE;
@@ -29,6 +29,6 @@ CREATE TABLE users (
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
-    photo_url TEXT,
+    photo_url TEXT DEFAULT 'https://cdn3.vectorstock.com/i/1000x1000/21/62/human-icon-in-circle-vector-25482162.jp',
     is_admin BOOLEAN NOT NULL DEFAULT FALSE
 );

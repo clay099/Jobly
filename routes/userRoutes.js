@@ -24,7 +24,7 @@ router.post("/", async (req, res, next) => {
 	try {
 		// try user against schema
 		const result = jsonschema.validate(req.body, userSchema);
-
+        
 		// if user fails against schema throw error
 		if (!result.valid) {
 			let listErr = result.errors.map((e) => e.stack);
