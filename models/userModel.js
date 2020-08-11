@@ -43,14 +43,14 @@ class User {
 	/** get all users */
 	static async all() {
 		const result = await db.query(
-			`SELECT username, password, first_name, last_name, email, photo_url, is_admin FROM users ORDER BY last_name, first_name`
+			`SELECT username, first_name, last_name, email FROM users ORDER BY last_name, first_name`
 		);
 		return result.rows.map((u) => new User(u));
 	}
 	/** get user by username */
 	static async get(username) {
 		const result = await db.query(
-			`SELECT username, password, first_name, last_name, email, photo_url, is_admin FROM users WHERE username=$1`,
+			`SELECT username, first_name, last_name, email FROM users WHERE username=$1`,
 			[username]
 		);
 		const user = result.rows[0];
