@@ -20,6 +20,10 @@ app.use("/companies", companyRoutes);
 const jobRoutes = require("./routes/jobRoutes");
 app.use("/jobs", jobRoutes);
 
+// set up users routes
+const userRoutes = require("./routes/userRoutes");
+app.use("/users", userRoutes);
+
 /** 404 handler */
 
 app.use(function (req, res, next) {
