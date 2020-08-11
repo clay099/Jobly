@@ -13,6 +13,10 @@ app.use(express.json());
 // add logging system
 app.use(morgan("tiny"));
 
+// set up base routes
+const baseRoutes = require("./routes/baseRoutes");
+app.use("/", baseRoutes);
+
 // set up companies routes
 const companyRoutes = require("./routes/companyRoutes");
 app.use("/companies", companyRoutes);

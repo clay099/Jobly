@@ -2,6 +2,9 @@ const db = require("../db");
 const ExpressError = require("../helpers/expressError");
 const sqlForPartialUpdate = require("../helpers/partialUpdate");
 const sqlForDelete = require("../helpers/removeFromDB");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const { BCRYPT_WORK_FACTOR, JWT_SECRET_KEY } = require("../config");
 
 /**collection of related methods for user */
 
@@ -26,11 +29,12 @@ class User {
 		photo_url = "https://cdn3.vectorstock.com/i/1000x1000/21/62/human-icon-in-circle-vector-25482162.jpg",
 		is_admin = false,
 	}) {
+		const hashedPW = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
 		const result = await db.query(
 			`INSERT INTO users (username, password, first_name, last_name, email, photo_url, is_admin)
             VALUES ($1, $2, $3, $4, $5, $6, $7)
             RETURNING username, password, first_name, last_name, email, photo_url, is_admin`,
-			[username, password, first_name, last_name, email, photo_url, is_admin]
+			[username, hashedPW, first_name, last_name, email, photo_url, is_admin]
 		);
 		const user = result.rows[0];
 
@@ -81,6 +85,9 @@ class User {
 	 */
 
 	async update(items) {
+		if (items.password) {
+			items.password = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
+		}
 		const updateData = sqlForPartialUpdate("users", items, "username", this.username);
 		const result = await db.query(updateData.query, updateData.values);
 		let u = result.rows[0];
@@ -102,6 +109,18 @@ class User {
 			throw err;
 		}
 		return "deleted";
+	}
+
+	async authenticate(password) {
+		if ((await bcrypt.compare(password, this.password)) === true) {
+			let token = jwt.sign(
+				{ username: this.username, is_admin: this.is_admin },
+				JWT_SECRET_KEY
+			);
+			return token;
+		}
+		const err = new ExpressError(`Invalid username/password`, 400);
+		throw err;
 	}
 }
 

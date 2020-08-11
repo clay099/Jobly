@@ -13,15 +13,21 @@ const PORT = +process.env.PORT || 3000;
 // - else: 'jobly'
 
 let DB_URI = `postgresql://`;
+let BCRYPT_WORK_FACTOR;
+let JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || "testKEY";
 
 if (process.env.NODE_ENV === "test") {
 	DB_URI = "jobly-test";
+	BCRYPT_WORK_FACTOR = 1;
 } else {
 	DB_URI = process.env.DATABASE_URL || "jobly";
+	BCRYPT_WORK_FACTOR = 12;
 }
 
 module.exports = {
 	SECRET_KEY,
 	PORT,
 	DB_URI,
+	BCRYPT_WORK_FACTOR,
+	JWT_SECRET_KEY,
 };
