@@ -4,11 +4,12 @@ const Company = require("../models/companyModel");
 const jsonschema = require("jsonschema");
 const companySchema = require("../schema/companySchema.json");
 const { companyQueryStringHelp } = require("../helpers/queryString");
+const { ensureLoggedIn, ensureIsAdmin } = require("../middleware/auth");
 
 const router = new express.Router();
 
 /** GET / => {companies : [companyData], [company2Data], ...} */
-router.get("/", async (req, res, next) => {
+router.get("/", ensureLoggedIn, async (req, res, next) => {
 	try {
 		let companies = await Company.all();
 
@@ -24,7 +25,7 @@ router.get("/", async (req, res, next) => {
 });
 
 /** POST / companyData => {company: newCompany} */
-router.post("/", async (req, res, next) => {
+router.post("/", ensureIsAdmin, async (req, res, next) => {
 	try {
 		// try company against schema
 		const result = jsonschema.validate(req.body, companySchema);
@@ -44,7 +45,7 @@ router.post("/", async (req, res, next) => {
 });
 
 /** GET /[handle] => {company: companyData} */
-router.get("/:handle", async (req, res, next) => {
+router.get("/:handle", ensureLoggedIn, async (req, res, next) => {
 	try {
 		const company = await Company.get(req.params.handle);
 		return res.json({ company });
@@ -54,7 +55,7 @@ router.get("/:handle", async (req, res, next) => {
 });
 
 /** PATCH /[handle] => {company: companyData} */
-router.patch("/:handle", async (req, res, next) => {
+router.patch("/:handle", ensureIsAdmin, async (req, res, next) => {
 	try {
 		let comp = await Company.get(req.params.handle);
 
@@ -82,7 +83,7 @@ router.patch("/:handle", async (req, res, next) => {
 });
 
 /** DELETE /[handle] => {message: "Company deleted"} */
-router.delete("/:handle", async (req, res, next) => {
+router.delete("/:handle", ensureIsAdmin, async (req, res, next) => {
 	try {
 		await Company.remove(req.params.handle);
 		return res.json({ message: "Company deleted" });

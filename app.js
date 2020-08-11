@@ -8,6 +8,10 @@ const morgan = require("morgan");
 
 const app = express();
 
+// set up authentication middleware
+const { authenticateJWT } = require("./middleware/auth");
+app.use(authenticateJWT);
+
 app.use(express.json());
 
 // add logging system

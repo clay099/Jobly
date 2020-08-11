@@ -3,6 +3,7 @@ const ExpressError = require("../helpers/expressError");
 const User = require("../models/userModel");
 const jsonschema = require("jsonschema");
 const userSchema = require("../schema/userSchema.json");
+const { ensureCorrectUser } = require("../middleware/auth");
 
 const router = new express.Router();
 
@@ -51,7 +52,7 @@ router.get("/:username", async (req, res, next) => {
 });
 
 /** PATCH /[username] => {user: userData} */
-router.patch("/:username", async (req, res, next) => {
+router.patch("/:username", ensureCorrectUser, async (req, res, next) => {
 	try {
 		let u = await User.getAll(req.params.username);
 
@@ -83,7 +84,7 @@ router.patch("/:username", async (req, res, next) => {
 });
 
 /** DELETE /[id] => {message: "User deleted"} */
-router.delete("/:username", async (req, res, next) => {
+router.delete("/:username", ensureCorrectUser, async (req, res, next) => {
 	try {
 		await User.remove(req.params.username);
 		return res.json({ message: "User deleted" });
