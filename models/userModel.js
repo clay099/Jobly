@@ -23,7 +23,7 @@ class User {
 		first_name,
 		last_name,
 		email,
-		photo_url = "",
+		photo_url = "https://cdn3.vectorstock.com/i/1000x1000/21/62/human-icon-in-circle-vector-25482162.jpg",
 		is_admin = false,
 	}) {
 		const result = await db.query(
