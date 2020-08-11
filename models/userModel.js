@@ -70,7 +70,7 @@ class User {
 		const user = result.rows[0];
 
 		if (user === undefined) {
-			const err = new ExpressError(`Could not find user id: ${id}`, 404);
+			const err = new ExpressError(`Could not find User username: ${username}`, 404);
 			throw err;
 		}
 		return new User(user);
