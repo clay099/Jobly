@@ -27,7 +27,7 @@ class User {
 		is_admin = false,
 	}) {
 		const result = await db.query(
-			`INSERT INTO jobs (username, password, first_name, last_name, email, photo_url, is_admin)
+			`INSERT INTO users (username, password, first_name, last_name, email, photo_url, is_admin)
             VALUES ($1, $2, $3, $4, $5, $6, $7)
             RETURNING username, password, first_name, last_name, email, photo_url, is_admin`,
 			[username, password, first_name, last_name, email, photo_url, is_admin]
