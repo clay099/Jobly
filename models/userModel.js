@@ -95,7 +95,7 @@ class User {
 	/** remove user with matching id */
 	static async remove(username) {
 		let queryString = sqlForDelete("users", "username", username);
-		const result = await db.query(queryString.query, [queryString.username]);
+		const result = await db.query(queryString.query, [queryString.id]);
 
 		if (result.rows.length === 0) {
 			const err = new ExpressError(`Could not find user username: ${username}`, 404);
