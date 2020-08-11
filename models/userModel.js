@@ -89,10 +89,10 @@ class User {
 		delete u.password;
 		delete u.is_admin;
 
-		return new User(u);
+		return u;
 	}
 
-	/** remove user with matching id */
+	/** remove user with matching username */
 	static async remove(username) {
 		let queryString = sqlForDelete("users", "username", username);
 		const result = await db.query(queryString.query, [queryString.id]);
