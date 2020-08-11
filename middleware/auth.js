@@ -37,7 +37,7 @@ function ensureCorrectUser(req, res, next) {
 			const err = new ExpressError(`Unauthorized`, 401);
 			return next(err);
 		}
-	} catch (err) {
+	} catch (e) {
 		// errors would happen here if we made a request and req.user is undefined
 		const err = new ExpressError(`Unauthorized`, 401);
 		return next(err);
@@ -54,7 +54,7 @@ function ensureIsAdmin(req, res, next) {
 			const err = new ExpressError(`Unauthorized`, 401);
 			return next(err);
 		}
-	} catch (err) {
+	} catch (e) {
 		// errors would happen here if we made a request and req.user is undefined
 		const err = new ExpressError(`Unauthorized`, 401);
 		return next(err);
