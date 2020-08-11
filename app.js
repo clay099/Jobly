@@ -8,11 +8,13 @@ const morgan = require("morgan");
 
 const app = express();
 
+// allow both form-encoded and json body parsing
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 // set up authentication middleware
 const { authenticateJWT } = require("./middleware/auth");
 app.use(authenticateJWT);
-
-app.use(express.json());
 
 // add logging system
 app.use(morgan("tiny"));

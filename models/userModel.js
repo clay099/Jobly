@@ -86,7 +86,7 @@ class User {
 
 	async update(items) {
 		if (items.password) {
-			items.password = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
+			items.password = await bcrypt.hash(items.password, BCRYPT_WORK_FACTOR);
 		}
 		const updateData = sqlForPartialUpdate("users", items, "username", this.username);
 		const result = await db.query(updateData.query, updateData.values);
