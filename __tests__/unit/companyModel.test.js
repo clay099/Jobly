@@ -7,6 +7,7 @@ const Job = require("../../models/jobModel");
 describe("Test Company Model", () => {
 	let values;
 	beforeEach(async function () {
+		await db.query("DELETE FROM jobs");
 		await db.query("DELETE FROM companies");
 		values = {
 			handle: "AAPL",
@@ -192,5 +193,7 @@ describe("Test Company Model", () => {
 	});
 });
 afterAll(async function () {
+	await db.query("DELETE FROM jobs");
+	await db.query("DELETE FROM companies");
 	await db.end();
 });

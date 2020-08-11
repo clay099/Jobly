@@ -140,5 +140,7 @@ describe("test job routes", () => {
 	});
 });
 afterAll(async function () {
+	await db.query("DELETE FROM jobs");
+	await db.query("DELETE FROM companies");
 	await db.end();
 });

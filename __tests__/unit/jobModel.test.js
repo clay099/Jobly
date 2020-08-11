@@ -5,7 +5,7 @@ const Job = require("../../models/jobModel");
 const Company = require("../../models/companyModel");
 console.error = jest.fn();
 
-describe("Test Company Model", () => {
+describe("Test Job Model", () => {
 	let values;
 	let company;
 	beforeEach(async function () {
@@ -181,5 +181,7 @@ describe("Test Company Model", () => {
 	});
 });
 afterAll(async function () {
+	await db.query("DELETE FROM jobs");
+	await db.query("DELETE FROM companies");
 	await db.end();
 });

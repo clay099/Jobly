@@ -152,5 +152,6 @@ describe("test user routes", () => {
 	});
 });
 afterAll(async function () {
+	await db.query("DELETE FROM users");
 	await db.end();
 });

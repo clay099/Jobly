@@ -203,5 +203,6 @@ describe("Test User model", () => {
 	});
 });
 afterAll(async function () {
+	await db.query("DELETE FROM users");
 	await db.end();
 });

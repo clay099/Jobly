@@ -10,6 +10,8 @@ describe("test company routes", () => {
 	let c;
 	let values;
 	beforeEach(async function () {
+		await db.query("DELETE FROM jobs");
+		await db.query("DELETE FROM companies");
 		values = {
 			handle: "AAPL",
 			name: "Apple",
@@ -17,7 +19,6 @@ describe("test company routes", () => {
 			description: "tech company",
 			logo_url: "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",
 		};
-		await db.query("DELETE FROM companies");
 		c = await Company.create(values);
 	});
 	describe("GET /companies", () => {
@@ -88,7 +89,7 @@ describe("test company routes", () => {
 			expect(resp.statusCode).toBe(200);
 			expect(resp.body).toEqual({ company: c });
 		});
-		test("get details on company when is also job data", async () => {
+		test("get details on company when it has job data", async () => {
 			let job = await Job.create({
 				title: "owner",
 				salary: 100000,
@@ -163,5 +164,7 @@ describe("test company routes", () => {
 	});
 });
 afterAll(async function () {
+	await db.query("DELETE FROM jobs");
+	await db.query("DELETE FROM companies");
 	await db.end();
 });
