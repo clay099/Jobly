@@ -24,7 +24,7 @@ router.post("/", async (req, res, next) => {
 	try {
 		// try user against schema
 		const result = jsonschema.validate(req.body, userSchema);
-        
+
 		// if user fails against schema throw error
 		if (!result.valid) {
 			let listErr = result.errors.map((e) => e.stack);
@@ -52,7 +52,7 @@ router.get("/:username", async (req, res, next) => {
 /** PATCH /[username] => {user: userData} */
 router.patch("/:username", async (req, res, next) => {
 	try {
-		let u = await User.get(req.params.username);
+		let u = await User.getAll(req.params.username);
 
 		// if password, first_name, last_name, email, photo_url, is_admin has been provided in req.body update user details otherwise leave value
 		u.password = req.body.password ? req.body.password : u.password;
@@ -66,7 +66,7 @@ router.patch("/:username", async (req, res, next) => {
 		u.photo_url = req.body.photo_url ? req.body.photo_url : u.photo_url;
 
 		u.is_admin = req.body.is_admin ? req.body.is_admin : u.is_admin;
-
+		console.log(u);
 		// validate against schema
 		const result = jsonschema.validate({ u }, userSchema);
 		if (!result.valid) {

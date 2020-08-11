@@ -61,6 +61,20 @@ class User {
 		}
 		return new User(user);
 	}
+	/** get all user details by username */
+	static async getAll(username) {
+		const result = await db.query(
+			`SELECT username, password, first_name, last_name, email, photo_url, is_admin FROM users WHERE username=$1`,
+			[username]
+		);
+		const user = result.rows[0];
+
+		if (user === undefined) {
+			const err = new ExpressError(`Could not find user id: ${id}`, 404);
+			throw err;
+		}
+		return new User(user);
+	}
 
 	/** update user
 	 * - items: an object with keys of columns you want to update and values with updated values
