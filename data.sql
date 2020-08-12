@@ -54,4 +54,6 @@ INSERT INTO jobs (title, salary, equity, company_handle) VALUES ('owner', 100000
 -- note all passwords are "password" - this is needed to login and obtain the token
 INSERT INTO users (username, password, first_name, last_name, email, is_admin) VALUES ('janeDoe', '$2b$12$axV/r/mSTz0UnzFedqsC7ORBU1T4ENsRdqZvGiW14hzadUYMVH5Py', 'Jane', 'Doe', 'janeDoe@gmail.com', false), ('johnDoe', '$2b$12$axV/r/mSTz0UnzFedqsC7ORBU1T4ENsRdqZvGiW14hzadUYMVH5Py', 'John', 'Doe', 'johnDoe@gmail.com', false), ('mom', '$2b$12$axV/r/mSTz0UnzFedqsC7ORBU1T4ENsRdqZvGiW14hzadUYMVH5Py', 'Mom', 'User', 'mom@gmail.com', false), ('admin', '$2b$12$axV/r/mSTz0UnzFedqsC7ORBU1T4ENsRdqZvGiW14hzadUYMVH5Py', 'Admin', 'User', 'admin@gmail.com', true);
 
+-- for testing janeDoe token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbmVEb2UiLCJpc19hZG1pbiI6ZmFsc2UsImlhdCI6MTU5NzI1MDY0NH0.LJuKkeCwN-JHhLkOz4FwwFaEy4YVNajK536q9e4sxMQ"
+
 INSERT INTO applications (username, job_id, state) VALUES ('janeDoe', 1, 'interested'), ('janeDoe', 2, 'applied'), ('johnDoe', 2, 'applied');

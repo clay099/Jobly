@@ -5,6 +5,11 @@ const jsonschema = require("jsonschema");
 const jobSchema = require("../schema/jobSchema.json");
 const { jobQueryStringHelp } = require("../helpers/queryString");
 const { ensureLoggedIn, ensureIsAdmin } = require("../middleware/auth");
+const User = require("../models/userModel");
+const Application = require("../models/applicationModel");
+const appSchema = require("../schema/applicationSchema.json");
+const { json } = require("express");
+
 
 const router = new express.Router();
 
@@ -95,6 +100,31 @@ router.delete("/:id", ensureIsAdmin, async (req, res, next) => {
 	try {
 		await Job.remove(req.params.id);
 		return res.json({ message: "Job deleted" });
+	} catch (e) {
+		return next(e);
+	}
+});
+
+/**POST /[id]/apply {state: string-of-app-state, _token: tokenDate} => {message: "new-state"}*/
+router.post("/:id/apply", ensureLoggedIn, async (req, res, next) => {
+	try {
+        let obj = { username: req.user.username, job_id=req.params.id, state: req.body.state };
+
+        // try application against schema
+		const result = jsonschema.validate(obj, appSchema);
+
+		// if application fails against schema throw error
+		if (!result.valid) {
+			let listErr = result.errors.map((e) => e.stack);
+			let err = new ExpressError(listErr, 400);
+			return next(err);
+        }
+        
+        // we know job passes and create in DB and return as json. Note there may be issue with PK username or PK job_id not being found 
+        let application = await Application.create(obj);
+
+        return json({message: application.state})
+
 	} catch (e) {
 		return next(e);
 	}
