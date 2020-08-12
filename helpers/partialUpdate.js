@@ -32,10 +32,23 @@ function sqlForPartialUpdate(table, items, key, id) {
 
 	// build query
 	let cols = columns.join(", ");
-	let query = `UPDATE ${table} SET ${cols} WHERE ${key}=$${idx} RETURNING *`;
+	let query;
+	if (Array.isArray(key)) {
+		query = `UPDATE ${table} SET ${cols} WHERE ${key[0]}=$${idx} AND ${key[1]}=$${
+			idx + 1
+		} RETURNING *`;
+	} else {
+		query = `UPDATE ${table} SET ${cols} WHERE ${key}=$${idx} RETURNING *`;
+	}
 
 	let values = Object.values(items);
-	values.push(id);
+
+	if (Array.isArray(id)) {
+		values.push(id[0]);
+		values.push(id[1]);
+	} else {
+		values.push(id);
+	}
 
 	return { query, values };
 }
