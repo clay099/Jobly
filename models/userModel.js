@@ -54,7 +54,11 @@ class User {
 	/** get user by username */
 	static async get(username) {
 		const result = await db.query(
-			`SELECT username, first_name, last_name, email FROM users WHERE username=$1`,
+			`SELECT u.username, u.first_name, u.last_name, u.email, a.state, j.id, j.title, j.salary, j.equity, j.date_posted
+            FROM users AS u
+            LEFT JOIN applications AS a ON a.username = u.username
+            LEFT JOIN jobs AS j ON j.id = a.job_id
+            WHERE u.username=$1`,
 			[username]
 		);
 		const user = result.rows[0];
@@ -63,7 +67,24 @@ class User {
 			const err = new ExpressError(`Could not find User username: ${username}`, 404);
 			throw err;
 		}
-		return new User(user);
+		let u = new User(user);
+		let jobs = result.rows
+			// filters out rows which don't have an job id
+			.filter((j) => j.id)
+			// for rows which have values put in a list
+			.map((j) => ({
+				id: j.id,
+				title: j.title,
+				salary: j.salary,
+				equity: j.equity,
+				date_posted: j.date_posted,
+				state: j.state,
+			}));
+		// if list if empty do nothing, otherwise add list to u object
+		if (jobs.length !== 0) {
+			u.jobs = jobs;
+		}
+		return u;
 	}
 	/** get all user details by username */
 	static async getAll(username) {
