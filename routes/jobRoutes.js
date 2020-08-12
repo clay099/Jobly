@@ -10,7 +10,6 @@ const Application = require("../models/applicationModel");
 const appSchema = require("../schema/applicationSchema.json");
 const { json } = require("express");
 
-
 const router = new express.Router();
 
 /** GET / {_token: tokenDate} => {jobs : [jobData], [job2Data], ...} */
@@ -108,9 +107,9 @@ router.delete("/:id", ensureIsAdmin, async (req, res, next) => {
 /**POST /[id]/apply {state: string-of-app-state, _token: tokenDate} => {message: "new-state"}*/
 router.post("/:id/apply", ensureLoggedIn, async (req, res, next) => {
 	try {
-        let obj = { username: req.user.username, job_id=req.params.id, state: req.body.state };
+		let obj = { username: req.user.username, job_id: req.params.id, state: req.body.state };
 
-        // try application against schema
+		// try application against schema
 		const result = jsonschema.validate(obj, appSchema);
 
 		// if application fails against schema throw error
@@ -118,13 +117,12 @@ router.post("/:id/apply", ensureLoggedIn, async (req, res, next) => {
 			let listErr = result.errors.map((e) => e.stack);
 			let err = new ExpressError(listErr, 400);
 			return next(err);
-        }
-        
-        // we know job passes and create in DB and return as json. Note there may be issue with PK username or PK job_id not being found 
-        let application = await Application.create(obj);
+		}
 
-        return json({message: application.state})
+		// we know job passes and create in DB and return as json. Note there may be issue with PK username or PK job_id not being found
+		let application = await Application.create(obj);
 
+		return json({ message: application.state });
 	} catch (e) {
 		return next(e);
 	}
