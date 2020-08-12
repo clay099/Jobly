@@ -44,8 +44,8 @@ class Application {
 		const updateData = sqlForPartialUpdate(
 			"applications",
 			items,
-			"app_pk",
-			this.username.concat(" ", this.job_id)
+			["username", "job_id"],
+			[this.username, this.job_id]
 		);
 		const result = await db.query(updateData.query, updateData.values);
 		return result.rows[0];
