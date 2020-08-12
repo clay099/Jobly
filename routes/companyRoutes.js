@@ -8,7 +8,7 @@ const { ensureLoggedIn, ensureIsAdmin } = require("../middleware/auth");
 
 const router = new express.Router();
 
-/** GET / => {companies : [companyData], [company2Data], ...} */
+/** GET / {_token: tokenDate} => {companies : [companyData], [company2Data], ...} */
 router.get("/", ensureLoggedIn, async (req, res, next) => {
 	try {
 		let companies = await Company.all();
@@ -24,7 +24,7 @@ router.get("/", ensureLoggedIn, async (req, res, next) => {
 	}
 });
 
-/** POST / companyData => {company: newCompany} */
+/** POST / {companyData, _token: tokenDate}} => {company: newCompany} */
 router.post("/", ensureIsAdmin, async (req, res, next) => {
 	try {
 		// try company against schema
@@ -44,7 +44,7 @@ router.post("/", ensureIsAdmin, async (req, res, next) => {
 	}
 });
 
-/** GET /[handle] => {company: companyData} */
+/** GET /[handle] {_token: tokenDate} => {company: companyData} */
 router.get("/:handle", ensureLoggedIn, async (req, res, next) => {
 	try {
 		const company = await Company.get(req.params.handle);
@@ -54,7 +54,7 @@ router.get("/:handle", ensureLoggedIn, async (req, res, next) => {
 	}
 });
 
-/** PATCH /[handle] => {company: companyData} */
+/** PATCH /[handle] {companyData, _token: tokenDate} => {company: companyData} */
 router.patch("/:handle", ensureIsAdmin, async (req, res, next) => {
 	try {
 		let comp = await Company.get(req.params.handle);
@@ -82,7 +82,7 @@ router.patch("/:handle", ensureIsAdmin, async (req, res, next) => {
 	}
 });
 
-/** DELETE /[handle] => {message: "Company deleted"} */
+/** DELETE /[handle] {_token: tokenDate} => {message: "Company deleted"} */
 router.delete("/:handle", ensureIsAdmin, async (req, res, next) => {
 	try {
 		await Company.remove(req.params.handle);
