@@ -20,7 +20,7 @@ router.get("/", async (req, res, next) => {
 	}
 });
 
-/** POST / userData => {user: newUser} */
+/** POST / {userData, _token: tokenDate} => {user: newUser} */
 router.post("/", async (req, res, next) => {
 	try {
 		// try user against schema
@@ -51,7 +51,7 @@ router.get("/:username", async (req, res, next) => {
 	}
 });
 
-/** PATCH /[username] => {user: userData} */
+/** PATCH /[username] {userData, _token: tokenDate} => {user: userData} */
 router.patch("/:username", ensureCorrectUser, async (req, res, next) => {
 	try {
 		let u = await User.getAll(req.params.username);
