@@ -121,8 +121,7 @@ router.post("/:id/apply", ensureLoggedIn, async (req, res, next) => {
 
 		// we know job passes and create in DB and return as json. Note there may be issue with PK username or PK job_id not being found
 		let application = await Application.create(obj);
-
-		return json({ message: application.state });
+		return res.json({ message: application.state });
 	} catch (e) {
 		return next(e);
 	}

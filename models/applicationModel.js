@@ -22,7 +22,6 @@ class Application {
 			[username, job_id, state]
 		);
 		const app = result.rows[0];
-
 		if (app === undefined) {
 			const err = new ExpressError("Could not create application", 400);
 			throw err;
