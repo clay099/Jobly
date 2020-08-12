@@ -5,10 +5,8 @@ const jsonschema = require("jsonschema");
 const jobSchema = require("../schema/jobSchema.json");
 const { jobQueryStringHelp } = require("../helpers/queryString");
 const { ensureLoggedIn, ensureIsAdmin } = require("../middleware/auth");
-const User = require("../models/userModel");
 const Application = require("../models/applicationModel");
 const appSchema = require("../schema/applicationSchema.json");
-const { json } = require("express");
 
 const router = new express.Router();
 
@@ -43,6 +41,19 @@ router.post("/", ensureIsAdmin, async (req, res, next) => {
 		// we know job passes and create in DB and return as json
 		const job = await Job.create(req.body);
 		return res.status(201).json({ job });
+	} catch (e) {
+		return next(e);
+	}
+});
+
+/**POST /[id]/apply {state: string-of-app-state, _token: tokenDate} => {message: "new-state"}*/
+
+/** GET /match {_token: tokenDate} => {matchedJobs: matchedJobArr}*/
+router.get("/match", ensureLoggedIn, async (req, res, next) => {
+	try {
+		let matchedJobs = await Job.match(req.user.username);
+
+		return res.json({ matchedJobs });
 	} catch (e) {
 		return next(e);
 	}

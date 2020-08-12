@@ -76,6 +76,27 @@ class Job {
 		}
 		return "deleted";
 	}
+
+	/** match user with possible jobs based on matching technologies */
+	static async match(username) {
+		const result = await db.query(
+			`SELECT j.id, j.title, j.salary, j.equity, j.company_handle, j.date_posted
+            FROM users as u
+            LEFT JOIN user_technologies AS ut ON ut.username = u.username
+            INNER JOIN job_technologies AS jt ON ut.technologies_id = jt.technologies_id
+            LEFT JOIN jobs AS j ON jt.job_id = j.id
+            WHERE u.username=$1
+            GROUP BY j.id`,
+			[username]
+		);
+		let jobs = result.rows.map((j) => new Job(j));
+
+		if (jobs.length === 0) {
+			const err = new ExpressError(`Could not find any matching jobs`, 404);
+			throw err;
+		}
+		return jobs;
+	}
 }
 
 module.exports = Job;
