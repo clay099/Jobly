@@ -15,4 +15,12 @@ router.post("/login", async (req, res, next) => {
 	}
 });
 
+router.get('/match', async (req, res, next) => {
+    try {
+        
+    } catch (e) {
+        return next(e)
+    }
+})
+
 module.exports = router;
