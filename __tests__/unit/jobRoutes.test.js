@@ -4,6 +4,8 @@ const db = require("../../db");
 const app = require("../../app");
 const Job = require("../../models/jobModel");
 const Company = require("../../models/companyModel");
+const User = require("../../models/userModel");
+const Application = require("../../models/applicationModel");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET_KEY } = require("../../config");
 console.error = jest.fn();
@@ -234,9 +236,75 @@ describe("test job routes", () => {
 			expect(resp.body.message).toEqual("Unauthorized");
 		});
 	});
+	describe("/POST /jobs/[id]/apply", () => {
+		beforeEach(async function () {
+			await db.query("DELETE FROM applications");
+			await db.query("DELETE FROM jobs");
+			await db.query("DELETE FROM users");
+			j = await Job.create(values);
+			j.date_posted = expect.any(String);
+		});
+		test("apply for job when user is logged in", async () => {
+			let u = await User.create({
+				username: "testUser",
+				password: "testPW",
+				first_name: "first",
+				last_name: "last",
+				email: "test@gmail.com",
+				photo_url:
+					"https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-260nw-418179856.jpg",
+				is_admin: true,
+			});
+			let resp = await request(app).post(`/jobs/${j.id}/apply`).send({
+				state: "interested",
+				_token: adminUserToken,
+			});
+			expect(resp.body).toEqual({ message: "interested" });
+			expect(resp.status).toBe(201);
+		});
+		test("provide an error is user is not logged in", async () => {
+			let u = await User.create({
+				username: "testUser",
+				password: "testPW",
+				first_name: "first",
+				last_name: "last",
+				email: "test@gmail.com",
+				photo_url:
+					"https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-260nw-418179856.jpg",
+				is_admin: true,
+			});
+			let resp = await request(app).post(`/jobs/${j.id}/apply`).send({
+				state: "interested",
+			});
+			expect(resp.body.message).toEqual("Unauthorized");
+			expect(resp.status).toBe(401);
+		});
+		test("provide an error if state is not valid", async () => {
+			let u = await User.create({
+				username: "testUser",
+				password: "testPW",
+				first_name: "first",
+				last_name: "last",
+				email: "test@gmail.com",
+				photo_url:
+					"https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-260nw-418179856.jpg",
+				is_admin: true,
+			});
+			let resp = await request(app).post(`/jobs/${j.id}/apply`).send({
+				state: "invalid",
+				_token: adminUserToken,
+			});
+			expect(resp.status).toBe(400);
+			expect(resp.body.message).toEqual([
+				"instance.state is not one of enum values: interested,applied,accepted,rejected",
+			]);
+		});
+	});
 });
 afterAll(async function () {
-	await db.query("DELETE FROM jobs");
+	await db.query("DELETE FROM applications");
 	await db.query("DELETE FROM companies");
+	await db.query("DELETE FROM jobs");
+	await db.query("DELETE FROM users");
 	await db.end();
 });
