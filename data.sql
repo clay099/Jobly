@@ -43,7 +43,7 @@ CREATE TYPE enum AS ENUM ('interested', 'applied', 'accepted', 'rejected');
 CREATE TABLE applications (
     username TEXT NOT NULL REFERENCES users ON DELETE CASCADE,
     job_id INTEGER NOT NULL REFERENCES jobs ON DELETE CASCADE,
-    state enum,
+    state enum NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT app_pk PRIMARY KEY(username,job_id)
 );

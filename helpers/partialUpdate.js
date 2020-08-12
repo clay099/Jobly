@@ -40,7 +40,7 @@ function sqlForPartialUpdate(table, items, key, id) {
 	} else {
 		query = `UPDATE ${table} SET ${cols} WHERE ${key}=$${idx} RETURNING *`;
 	}
-
+    
 	let values = Object.values(items);
 
 	if (Array.isArray(id)) {
