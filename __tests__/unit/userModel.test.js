@@ -2,6 +2,9 @@ process.env.NODE_ENV = "test";
 const db = require("../../db");
 const app = require("../../app");
 const User = require("../../models/userModel");
+const Job = require("../../models/jobModel");
+const Application = require("../../models/applicationModel");
+const Company = require("../../models/companyModel");
 console.error = jest.fn();
 
 describe("Test User model", () => {
@@ -140,6 +143,38 @@ describe("Test User model", () => {
 			expect(resp.message).toEqual(`Could not find User username: invalid`);
 			expect(resp.status).toEqual(404);
 		});
+		test("generates User details including a list of jobs that the user is associated with", async () => {
+			let company = await Company.create({
+				handle: "AAPL",
+				name: "Apple",
+				num_employees: 10000,
+				description: "tech company",
+				logo_url:
+					"https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",
+			});
+			let job = await Job.create({
+				title: "owner",
+				salary: 100000,
+				equity: 0.9,
+				company_handle: company.handle,
+			});
+			let application = await Application.create({
+				username: adminUser.username,
+				job_id: job.id,
+				state: "interested",
+			});
+
+			let resp = await User.get(adminUser.username);
+			delete adminUser.password;
+			delete adminUser.photo_url;
+			delete adminUser.is_admin;
+			job.state = application.state;
+			job.date_posted = expect.any(Object);
+			adminUser.jobs = [job];
+			console.log(adminUser);
+
+			expect(resp).toEqual(adminUser);
+		});
 	});
 	describe("test User.getALL() method", function () {
 		test("generates all User details", async () => {
@@ -220,6 +255,9 @@ describe("Test User model", () => {
 	});
 });
 afterAll(async function () {
+	await db.query("DELETE FROM applications");
+	await db.query("DELETE FROM companies");
+	await db.query("DELETE FROM jobs");
 	await db.query("DELETE FROM users");
 	await db.end();
 });

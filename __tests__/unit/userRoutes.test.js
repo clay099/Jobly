@@ -3,6 +3,9 @@ const request = require("supertest");
 const db = require("../../db");
 const app = require("../../app");
 const User = require("../../models/userModel");
+const Job = require("../../models/jobModel");
+const Application = require("../../models/applicationModel");
+const Company = require("../../models/companyModel");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET_KEY } = require("../../config");
 console.error = jest.fn();
@@ -101,6 +104,36 @@ describe("test user routes", () => {
 			let resp = await request(app).get(`/users/invalid`);
 			expect(resp.statusCode).toBe(404);
 			expect(resp.body.message).toEqual("Could not find User username: invalid");
+		});
+		test("get user details from username and include a list of jobs that the user is associated with", async () => {
+			let company = await Company.create({
+				handle: "AAPL",
+				name: "Apple",
+				num_employees: 10000,
+				description: "tech company",
+				logo_url:
+					"https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",
+			});
+			let job = await Job.create({
+				title: "owner",
+				salary: 100000,
+				equity: 0.9,
+				company_handle: company.handle,
+			});
+			let application = await Application.create({
+				username: u.username,
+				job_id: job.id,
+				state: "interested",
+			});
+
+			let resp = await request(app).get(`/users/${u.username}`);
+
+			expect(resp.statusCode).toBe(200);
+			delete u.photo_url;
+			job.state = application.state;
+			job.date_posted = expect.any(String);
+			u.jobs = [job];
+			expect(resp.body).toEqual({ user: u });
 		});
 	});
 	describe("PATCH /users/:username", () => {
@@ -203,6 +236,9 @@ describe("test user routes", () => {
 	});
 });
 afterAll(async function () {
+	await db.query("DELETE FROM applications");
+	await db.query("DELETE FROM companies");
+	await db.query("DELETE FROM jobs");
 	await db.query("DELETE FROM users");
 	await db.end();
 });
