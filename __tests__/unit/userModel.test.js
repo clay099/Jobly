@@ -6,7 +6,8 @@ console.error = jest.fn();
 
 describe("Test User model", () => {
 	let values;
-	let user;
+	let values2;
+	let adminUser;
 	beforeEach(async function () {
 		await db.query("DELETE FROM users");
 		values = {
@@ -19,7 +20,7 @@ describe("Test User model", () => {
 				"https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-260nw-418179856.jpg",
 			is_admin: true,
 		};
-		user = await User.create(values);
+		adminUser = await User.create(values);
 	});
 	describe("test User.create() method", () => {
 		beforeEach(async function () {
@@ -27,6 +28,7 @@ describe("Test User model", () => {
 		});
 		test("creates a new user", async function () {
 			let resp = await User.create(values);
+			values.password = expect.any(String);
 			expect(resp).toEqual(values);
 		});
 		test("creates a new user and adds default for photo_url and is_admin", async function () {
@@ -34,6 +36,7 @@ describe("Test User model", () => {
 			delete values.photo_url;
 			let resp = await User.create(values);
 
+			values.password = expect.any(String);
 			values.is_admin = false;
 			values.photo_url =
 				"https://cdn3.vectorstock.com/i/1000x1000/21/62/human-icon-in-circle-vector-25482162.jpg";
@@ -60,9 +63,7 @@ describe("Test User model", () => {
 			} catch (e) {
 				resp = e;
 			}
-			expect(resp.message).toEqual(
-				`null value in column "password" violates not-null constraint`
-			);
+			expect(resp.message).toEqual(`data and salt arguments required`);
 		});
 		test("throws an error if first_name is not provided", async function () {
 			delete values.first_name;
@@ -122,12 +123,12 @@ describe("Test User model", () => {
 	});
 	describe("test User.get() method", function () {
 		test("generates User details", async () => {
-			let resp = await User.get(user.username);
-			delete user.password;
-			delete user.photo_url;
-			delete user.is_admin;
+			let resp = await User.get(adminUser.username);
+			delete adminUser.password;
+			delete adminUser.photo_url;
+			delete adminUser.is_admin;
 
-			expect(resp).toEqual(user);
+			expect(resp).toEqual(adminUser);
 		});
 		test("throws an error if User is can't be found", async () => {
 			let resp;
@@ -142,8 +143,8 @@ describe("Test User model", () => {
 	});
 	describe("test User.getALL() method", function () {
 		test("generates all User details", async () => {
-			let resp = await User.getAll(user.username);
-			expect(resp).toEqual(user);
+			let resp = await User.getAll(adminUser.username);
+			expect(resp).toEqual(adminUser);
 		});
 		test("throws an error if User is can't be found", async () => {
 			let resp;
@@ -199,6 +200,22 @@ describe("Test User model", () => {
 			}
 			expect(resp.message).toEqual("Could not find user username: invalid");
 			expect(resp.status).toEqual(404);
+		});
+	});
+	describe("test User.authenticate", () => {
+		test("provides a token if user is authenticated", async () => {
+			let resp = await adminUser.authenticate(values.password);
+			expect(resp).toEqual(expect.any(String));
+		});
+		test("throws an error if password does not validate", async () => {
+			let resp;
+			try {
+				await adminUser.authenticate("invalid");
+			} catch (e) {
+				resp = e;
+			}
+			expect(resp.message).toEqual("Invalid username/password");
+			expect(resp.status).toEqual(400);
 		});
 	});
 });
