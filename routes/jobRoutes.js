@@ -8,7 +8,7 @@ const { ensureLoggedIn, ensureIsAdmin } = require("../middleware/auth");
 
 const router = new express.Router();
 
-/** GET / => {jobs : [jobData], [job2Data], ...} */
+/** GET / {_token: tokenDate} => {jobs : [jobData], [job2Data], ...} */
 router.get("/", ensureLoggedIn, async (req, res, next) => {
 	try {
 		let jobs = await Job.all();
@@ -24,7 +24,7 @@ router.get("/", ensureLoggedIn, async (req, res, next) => {
 	}
 });
 
-/** POST / jobData => {job: newJob} */
+/** POST / {jobData, _token: tokenDate} => {job: newJob} */
 router.post("/", ensureIsAdmin, async (req, res, next) => {
 	try {
 		// try job against schema
@@ -44,7 +44,7 @@ router.post("/", ensureIsAdmin, async (req, res, next) => {
 	}
 });
 
-/** GET /[id] => {job: jobData} */
+/** GET /[id] {_token: tokenDate} => {job: jobData} */
 router.get("/:id", ensureLoggedIn, async (req, res, next) => {
 	try {
 		const job = await Job.get(req.params.id);
@@ -54,7 +54,7 @@ router.get("/:id", ensureLoggedIn, async (req, res, next) => {
 	}
 });
 
-/** PATCH /[id] => {job: jobData} */
+/** PATCH /[id] {jobData, _token: tokenDate} => {job: jobData} */
 router.patch("/:id", ensureIsAdmin, async (req, res, next) => {
 	try {
 		let j = await Job.get(req.params.id);
@@ -90,7 +90,7 @@ router.patch("/:id", ensureIsAdmin, async (req, res, next) => {
 	}
 });
 
-/** DELETE /[id] => {message: "Job deleted"} */
+/** DELETE /[id] {_token: tokenDate} => {message: "Job deleted"} */
 router.delete("/:id", ensureIsAdmin, async (req, res, next) => {
 	try {
 		await Job.remove(req.params.id);
