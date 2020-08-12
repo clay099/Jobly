@@ -10,7 +10,7 @@ describe("sqlForDelete()", () => {
 		expect(answer).toEqual(query);
 	});
 
-	test("it should throw an error if all three paramters are not provided", async () => {
+	test("it should throw an error if all three parameters are not provided", async () => {
 		let e;
 		try {
 			sqlForDelete("companies", "name");
