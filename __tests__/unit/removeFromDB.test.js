@@ -1,5 +1,6 @@
 process.env.NODE_ENV = "test";
 const sqlForDelete = require("../../helpers/removeFromDB");
+console.error = jest.fn();
 
 describe("sqlForDelete()", () => {
 	test("it should create a query string with data to be deleted", async () => {

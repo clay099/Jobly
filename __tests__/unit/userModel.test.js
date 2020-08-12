@@ -171,7 +171,6 @@ describe("Test User model", () => {
 			job.state = application.state;
 			job.date_posted = expect.any(Object);
 			adminUser.jobs = [job];
-			console.log(adminUser);
 
 			expect(resp).toEqual(adminUser);
 		});
