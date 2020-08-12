@@ -3,6 +3,7 @@ const db = require("../../db");
 const app = require("../../app");
 const Company = require("../../models/companyModel");
 const Job = require("../../models/jobModel");
+console.error = jest.fn();
 
 describe("Test Company Model", () => {
 	let values;
