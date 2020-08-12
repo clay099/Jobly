@@ -53,9 +53,8 @@ class Application {
 
 	/** remove application with matching PK */
 	static async remove(username, job_id) {
-		let PK = username.concat(" ", job_id);
-		let queryString = sqlForDelete("companies", "handle", PK);
-		const result = await db.query(queryString.query, [queryString.id]);
+		let queryString = sqlForDelete("applications", ["username", "job_id"], [username, job_id]);
+		const result = await db.query(queryString.query, queryString.id);
 
 		if (result.rows.length === 0) {
 			const err = new ExpressError(
