@@ -85,6 +85,10 @@ class User {
 		if (jobs.length !== 0) {
 			u.jobs = jobs;
 		}
+		delete u.password;
+		delete u.photo_url;
+		delete u.is_admin;
+
 		return u;
 	}
 	/** get all user details by username */
