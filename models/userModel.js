@@ -54,7 +54,7 @@ class User {
 	/** get user by username */
 	static async get(username) {
 		const result = await db.query(
-			`SELECT u.username, u.first_name, u.last_name, u.email, a.state, j.id, j.title, j.salary, j.equity, j.date_posted
+			`SELECT u.username, u.first_name, u.last_name, u.email, a.state, j.id, j.company_handle, j.title, j.salary, j.equity, j.date_posted
             FROM users AS u
             LEFT JOIN applications AS a ON a.username = u.username
             LEFT JOIN jobs AS j ON j.id = a.job_id
@@ -73,6 +73,7 @@ class User {
 			.filter((j) => j.id)
 			// for rows which have values put in a list
 			.map((j) => ({
+				company_handle: j.company_handle,
 				id: j.id,
 				title: j.title,
 				salary: j.salary,
