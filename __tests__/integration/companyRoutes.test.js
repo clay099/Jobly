@@ -13,6 +13,8 @@ let adminUserToken = jwt.sign({ username: "testUser", is_admin: true }, JWT_SECR
 let generalUserToken = jwt.sign({ username: "testUser", is_admin: false }, JWT_SECRET_KEY);
 let c;
 let values;
+
+jest.setTimeout(10000);
 describe("test company routes", () => {
 	beforeEach(async function () {
 		await db.query("DELETE FROM jobs");

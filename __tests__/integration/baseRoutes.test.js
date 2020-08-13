@@ -5,6 +5,7 @@ const app = require("../../app");
 const User = require("../../models/userModel");
 console.error = jest.fn();
 
+jest.setTimeout(10000);
 describe("test base routes", () => {
 	let u;
 	let values;

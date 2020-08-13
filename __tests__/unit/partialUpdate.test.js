@@ -1,6 +1,7 @@
 process.env.NODE_ENV = "test";
 const sqlForPartialUpdate = require("../../helpers/partialUpdate");
 
+jest.setTimeout(10000);
 describe("partialUpdate()", () => {
 	it("should generate a proper partial update query with just 1 field", function () {
 		const items = {

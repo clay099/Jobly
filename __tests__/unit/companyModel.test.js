@@ -5,6 +5,7 @@ const Company = require("../../models/companyModel");
 const Job = require("../../models/jobModel");
 console.error = jest.fn();
 
+jest.setTimeout(10000);
 describe("Test Company Model", () => {
 	let values;
 	beforeEach(async function () {

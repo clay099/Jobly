@@ -5,6 +5,7 @@ const Job = require("../../models/jobModel");
 const Company = require("../../models/companyModel");
 console.error = jest.fn();
 
+jest.setTimeout(10000);
 describe("Test Job Model", () => {
 	let values;
 	let company;

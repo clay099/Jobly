@@ -10,6 +10,7 @@ const jwt = require("jsonwebtoken");
 const { JWT_SECRET_KEY } = require("../../config");
 console.error = jest.fn();
 
+jest.setTimeout(10000);
 describe("test user routes", () => {
 	let u; //will not show sensitive info
 	let uAll; // will show all user info

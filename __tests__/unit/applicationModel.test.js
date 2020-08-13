@@ -7,6 +7,7 @@ const User = require("../../models/userModel");
 const Company = require("../../models/companyModel");
 console.error = jest.fn();
 
+jest.setTimeout(10000);
 describe("Test Application model", () => {
 	let values;
 	beforeEach(async function () {

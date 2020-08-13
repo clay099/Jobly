@@ -7,6 +7,7 @@ const Application = require("../../models/applicationModel");
 const Company = require("../../models/companyModel");
 console.error = jest.fn();
 
+jest.setTimeout(10000);
 describe("Test User model", () => {
 	let values;
 	let values2;

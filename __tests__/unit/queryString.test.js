@@ -2,6 +2,7 @@ process.env.NODE_ENV = "test";
 const { companyQueryStringHelp, jobQueryStringHelp } = require("../../helpers/queryString");
 console.error = jest.fn();
 
+jest.setTimeout(10000);
 describe("companyQueryStringHelp()", () => {
 	let companies;
 	let c1;
