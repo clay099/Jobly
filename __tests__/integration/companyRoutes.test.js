@@ -8,12 +8,12 @@ const jwt = require("jsonwebtoken");
 const { JWT_SECRET_KEY } = require("../../config");
 console.error = jest.fn();
 
-describe("test company routes", async () => {
-	let c;
-	let values;
-	// create token don't actually go into DB and add user
-	let adminUserToken = jwt.sign({ username: "testUser", is_admin: true }, JWT_SECRET_KEY);
-	let generalUserToken = jwt.sign({ username: "testUser", is_admin: false }, JWT_SECRET_KEY);
+// create token don't actually go into DB and add user
+let adminUserToken = jwt.sign({ username: "testUser", is_admin: true }, JWT_SECRET_KEY);
+let generalUserToken = jwt.sign({ username: "testUser", is_admin: false }, JWT_SECRET_KEY);
+let c;
+let values;
+describe("test company routes", () => {
 	beforeEach(async function () {
 		await db.query("DELETE FROM jobs");
 		await db.query("DELETE FROM companies");
