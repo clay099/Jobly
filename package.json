@@ -1,11 +1,12 @@
 {
 	"name": "express-jobly",
 	"version": "1.0.0",
-	"description": "**Goals and requirements**\r   - All of your responses should be in JSON. Use Insonmia or curl to test your API.  \r   - Be thoughtful about function and variable names, and for you to write appropriate documentation for every function and route.  \r   - After each section, we expect you to write tests for the routes in that section.  \r   - For each resource, place all of your SQL/database logic in a class. We do not want to see ANY SQL in your routes!",
+	"description": "The goal of this project is to create a API with similar functionality to LinkedIn but on a smaller scale.",
 	"main": "server.js",
 	"scripts": {
 		"test": "jest --runInBand --coverage",
-		"start": "node server.js"
+		"start": "node server.js",
+		"seed": "dropdb jobly && createdb jobly && psql jobly < data.sql  && psql jobly < seed.sql && dropdb jobly-test && createdb jobly-test && psql jobly-test < data.sql"
 	},
 	"repository": {
 		"type": "git",

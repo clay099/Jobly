@@ -20,9 +20,20 @@ All of the above sections are validated with json schema. Classes and class meth
 
 > npm install
 
+## Seed
+
+> npm run seed
+
+**note:** the date file is set up to create the jobly and jobly-test database. It will also create the tables in both databases and seed the jobly database.
+
 ## Usage
 
 > npm start
+
+If you want to test the seeded jobly database with an API testing tool such as postman or insomnia you can login and save the token or use the below provided token. The majority of routes request a \_token to be send via JSON.
+
+janeDoe token =  
+{"\_token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbmVEb2UiLCJpc19hZG1pbiI6ZmFsc2UsImlhdCI6MTU5NzI1MDY0NH0.LJuKkeCwN-JHhLkOz4FwwFaEy4YVNajK536q9e4sxMQ"}
 
 ## Tests
 
