@@ -46,8 +46,6 @@ router.post("/", ensureIsAdmin, async (req, res, next) => {
 	}
 });
 
-/**POST /[id]/apply {state: string-of-app-state, _token: tokenDate} => {message: "new-state"}*/
-
 /** GET /match {_token: tokenDate} => {matchedJobs: matchedJobArr}*/
 router.get("/match", ensureLoggedIn, async (req, res, next) => {
 	try {

@@ -300,11 +300,103 @@ describe("test job routes", () => {
 			]);
 		});
 	});
+
+	describe("/GET /jobs/match", () => {
+		let u;
+		beforeEach(async function () {
+			await db.query("DELETE FROM applications");
+			await db.query("DELETE FROM jobs");
+			await db.query("DELETE FROM users");
+			await db.query("DELETE FROM technologies");
+			await db.query("DELETE FROM job_technologies");
+			await db.query("DELETE FROM user_technologies");
+			j = await Job.create(values);
+			// create new companies and jobs
+			await Company.create({
+				handle: "UNH",
+				name: "United",
+				num_employees: 10000,
+			});
+			j2 = await Job.create({
+				title: "Boss",
+				salary: 10000,
+				equity: 0.54,
+				company_handle: "UNH",
+			});
+			await Company.create({
+				handle: "HOME",
+				name: "Home Made",
+				num_employees: 10000,
+			});
+			j3 = await Job.create({
+				title: "staff",
+				salary: 10,
+				equity: 0.1,
+				company_handle: "HOME",
+			});
+			j.date_posted = expect.any(String);
+			u = await User.create({
+				username: "testUser",
+				password: "testPW",
+				first_name: "first",
+				last_name: "last",
+				email: "test@gmail.com",
+				photo_url:
+					"https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-260nw-418179856.jpg",
+				is_admin: true,
+			});
+			// add technologies to DB
+			let technologies = await db.query(
+				`INSERT INTO technologies (technology) VALUES ('Python'), ('JavaScript'), ('Ruby'), ('HTML'), ('C++'), ('Java'), ('CSS') RETURNING *`
+			);
+			// add technologies to jobs
+			let t = await db.query(
+				`INSERT INTO job_technologies (job_id, technologies_id) VALUES (${j.id}, ${technologies.rows[0].id}), (${j.id}, ${technologies.rows[1].id}), (${j2.id}, ${technologies.rows[0].id}),(${j3.id}, ${technologies.rows[5].id})  RETURNING *`
+			);
+			// add technologies to users
+			await db.query(
+				`INSERT INTO user_technologies (username, technologies_id) VALUES ('${u.username}', ${technologies.rows[0].id}) RETURNING *`
+			);
+		});
+		test("match user to jobs when job technology and user technology meet", async () => {
+			let resp = await request(app).get(`/jobs/match`).send({ _token: adminUserToken });
+			expect(resp.body).toEqual({
+				matchedJobs: [
+					{
+						company_handle: "AAPL",
+						date_posted: expect.any(String),
+						equity: 0.54,
+						id: expect.any(Number),
+						salary: 10000,
+						title: "manager",
+					},
+					{
+						company_handle: "UNH",
+						date_posted: expect.any(String),
+						equity: 0.54,
+						id: expect.any(Number),
+						salary: 10000,
+						title: "Boss",
+					},
+				],
+			});
+			expect(resp.status).toBe(200);
+		});
+		test("provide an error response if user technologies and job technologies do not meet", async () => {
+			let newToken = jwt.sign({ username: "newuser", is_admin: false }, JWT_SECRET_KEY);
+			let resp = await request(app).get(`/jobs/match`).send({ _token: newToken });
+			expect(resp.body.message).toEqual("Could not find any matching jobs");
+			expect(resp.status).toBe(404);
+		});
+	});
 });
 afterAll(async function () {
 	await db.query("DELETE FROM applications");
 	await db.query("DELETE FROM companies");
 	await db.query("DELETE FROM jobs");
 	await db.query("DELETE FROM users");
+	await db.query("DELETE FROM technologies");
+	await db.query("DELETE FROM job_technologies");
+	await db.query("DELETE FROM user_technologies");
 	await db.end();
 });
