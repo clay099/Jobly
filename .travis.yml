@@ -5,5 +5,6 @@ services:
     - postgresql
 before_script:
     - psql -c 'create database jobly_test;' -U postgres
+    - psql -c jobly_test --file=data.sql
 script:
     - jest --coverage --runInBand
