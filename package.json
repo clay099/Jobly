@@ -6,7 +6,7 @@
 	"scripts": {
 		"test": "jest --runInBand --coverage",
 		"start": "node server.js",
-		"seed": "dropdb jobly && createdb jobly && psql jobly < data.sql  && psql jobly < seed.sql && dropdb jobly-test && createdb jobly-test && psql jobly-test < data.sql"
+		"seed": "dropdb jobly && createdb jobly && psql jobly < data.sql  && psql jobly < seed.sql && dropdb jobly_test && createdb jobly_test && psql jobly_test < data.sql"
 	},
 	"repository": {
 		"type": "git",
