@@ -5,17 +5,17 @@ services:
     - postgresql
 
 addons:
-    postgresql: "12"
+    postgresql: "10"
     apt:
         packages:
-            - postgresql-12
-            - postgresql-client-12
+            - postgresql-10
+            - postgresql-client-10
 env:
     global:
         - PGPORT=5433
 
 before_script:
     - psql -c 'create database jobly_test;' -U postgres
-    - psql -c jobly_test --file=data.sql
+    - psql jobly_test < data.sql
 script:
     - jest --coverage --runInBand
