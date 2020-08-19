@@ -362,7 +362,7 @@ describe("test job routes", () => {
 		test("match user to jobs when job technology and user technology meet", async () => {
 			let resp = await request(app).get(`/jobs/match`).send({ _token: adminUserToken });
 			expect(resp.body).toEqual({
-				matchedJobs: [
+				matchedJobs: expect.arrayContaining([
 					{
 						company_handle: "AAPL",
 						date_posted: expect.any(String),
@@ -379,7 +379,7 @@ describe("test job routes", () => {
 						salary: 10000,
 						title: "Boss",
 					},
-				],
+				]),
 			});
 			expect(resp.status).toBe(200);
 		});
