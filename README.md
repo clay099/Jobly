@@ -35,6 +35,6 @@ If you want to test the seeded jobly database with an API testing tool such as p
 janeDoe token =  
 {"\_token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbmVEb2UiLCJpc19hZG1pbiI6ZmFsc2UsImlhdCI6MTU5NzI1MDY0NH0.LJuKkeCwN-JHhLkOz4FwwFaEy4YVNajK536q9e4sxMQ"}
 
-## Tests
+## Tests [![Build Status](https://travis-ci.com/clay099/Jobly.svg?branch=master)](https://travis-ci.com/clay099/Jobly)
 
 > npm test
