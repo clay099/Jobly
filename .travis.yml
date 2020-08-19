@@ -15,6 +15,7 @@ env:
         - PGPORT=5433
 
 before_script:
+    - sudo service postgresql restart 10
     - psql -c 'create database jobly_test;' -U postgres
     - psql jobly_test < data.sql
 script:
