@@ -141,7 +141,9 @@ describe("Test User model", () => {
 			} catch (e) {
 				resp = e;
 			}
-			expect(resp.message).toEqual(`Could not find User username: invalid`);
+			expect(resp.message).toEqual(
+				`Could not find User username: invalid`
+			);
 			expect(resp.status).toEqual(404);
 		});
 		test("generates User details including a list of jobs that the user is associated with", async () => {
@@ -188,7 +190,9 @@ describe("Test User model", () => {
 			} catch (e) {
 				resp = e;
 			}
-			expect(resp.message).toEqual(`Could not find User username: invalid`);
+			expect(resp.message).toEqual(
+				`Could not find User username: invalid`
+			);
 			expect(resp.status).toEqual(404);
 		});
 	});
@@ -233,7 +237,9 @@ describe("Test User model", () => {
 			} catch (e) {
 				resp = e;
 			}
-			expect(resp.message).toEqual("Could not find user username: invalid");
+			expect(resp.message).toEqual(
+				"Could not find user username: invalid"
+			);
 			expect(resp.status).toEqual(404);
 		});
 	});
