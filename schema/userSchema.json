@@ -12,7 +12,14 @@
 			"is_admin": false
 		}
 	],
-	"required": ["username", "password", "first_name", "last_name", "email", "is_admin"],
+	"required": [
+		"username",
+		"password",
+		"first_name",
+		"last_name",
+		"email",
+		"is_admin"
+	],
 	"title": "The root schema",
 	"properties": {
 		"username": {
@@ -66,7 +73,7 @@
 			]
 		},
 		"is_admin": {
-			"default": "",
+			"default": "false",
 			"description": "An explanation about the purpose of this instance.",
 			"examples": ["false"],
 			"title": "The is_admin schema",
