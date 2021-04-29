@@ -8,8 +8,8 @@ const ExpressError = require("../helpers/expressError");
 
 function authenticateJWT(req, res, next) {
 	try {
-		const tokenFromBody = req.body._token;
-		const payload = jwt.verify(tokenFromBody, JWT_SECRET_KEY);
+		const token = req.body._token || req.params._token;
+		const payload = jwt.verify(token, JWT_SECRET_KEY);
 		req.user = payload; // {username, is_admin}
 		return next();
 	} catch (err) {
