@@ -9,7 +9,7 @@ const db = new Client({
 		rejectUnauthorized: false,
 	},
 });
-
+console.log({ db });
 db.connect();
 
 module.exports = db;
