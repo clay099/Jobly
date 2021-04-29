@@ -8,6 +8,10 @@ const morgan = require("morgan");
 
 const app = express();
 
+// allow cors
+const cors = require("cors");
+app.use(cors({ origin: true, preflightContinue: true }));
+
 // allow both form-encoded and json body parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
