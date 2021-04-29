@@ -23,7 +23,9 @@ router.get("/", async (req, res, next) => {
 /** POST / {userData, _token: tokenDate} => {user: newUser} */
 router.post("/", async (req, res, next) => {
 	try {
-		req.body.is_admin = req.body.is_admin ? req.body.is_admin : true;
+		if (!req.body.is_admin) {
+			req.body.is_admin = true;
+		}
 		// try user against schema
 		const result = jsonschema.validate(req.body, userSchema);
 
