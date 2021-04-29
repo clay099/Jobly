@@ -10,9 +10,8 @@ function authenticateJWT(req, res, next) {
 	try {
 		let token = req.body._token;
 		if (!token) {
-			token = req.params._token;
+			token = req.query._token;
 		}
-		console.log({ token, req });
 		const payload = jwt.verify(token, JWT_SECRET_KEY);
 		req.user = payload; // {username, is_admin}
 		return next();
